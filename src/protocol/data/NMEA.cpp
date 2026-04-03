@@ -143,6 +143,24 @@ void NMEA_add_checksum(char *buf, size_t limit)
   snprintf_P(csum_ptr, limit, PSTR("%02X\r\n"), cs);
 }
 
+static bool NMEA_force_GP_talker(char *buf)
+{
+  if (buf[1] != 'G') {
+    return false;
+  }
+
+  char *star = strchr(buf, '*');
+  if (!star) {
+    return false;
+  }
+
+  buf[2] = 'P';
+  star[1] = '\0';
+  NMEA_add_checksum(buf, NMEA_BUFFER_SIZE - (size_t)(star + 1 - buf));
+
+  return true;
+}
+
 void NMEA_setup()
 {
 #if defined(USE_NMEA_CFG)
@@ -336,6 +354,9 @@ void NMEA_fini()
 
 void NMEA_Out(uint8_t dest, byte *buf, size_t size, bool nl)
 {
+  if (NMEA_force_GP_talker((char *) buf)) {
+    size = strlen((char *) buf);
+  }
   switch (dest)
   {
   case NMEA_UART:
