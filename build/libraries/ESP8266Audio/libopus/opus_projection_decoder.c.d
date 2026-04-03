@@ -1,0 +1,27 @@
+/home/sasa/Arduino/SoftRF-LY1.8/build/libraries/ESP8266Audio/libopus/opus_projection_decoder.c.o: \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_projection_decoder.c \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/config.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/mathops.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/arch.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/../opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/../opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/../opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/fixed_generic.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/entcode.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/ecintrin.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/os_support.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/os_support.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_private.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/arch.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/celt.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/../opus_custom.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/../opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/entenc.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/entdec.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_projection.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/opus_multistream.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/mapping_matrix.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/celt/stack_alloc.h

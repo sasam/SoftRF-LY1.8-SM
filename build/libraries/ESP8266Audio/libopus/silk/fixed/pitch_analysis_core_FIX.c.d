@@ -1,0 +1,37 @@
+/home/sasa/Arduino/SoftRF-LY1.8/build/libraries/ESP8266Audio/libopus/silk/fixed/pitch_analysis_core_FIX.c.o: \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/pitch_analysis_core_FIX.c \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../config.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../SigProc_FIX.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../typedef.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../resampler_structs.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../macros.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../config.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/arch.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/../opus_types.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/../opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/fixed_generic.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/ecintrin.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/arch.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/cpu_support.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../Inlines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../MacroCount.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../MacroDebug.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../pitch_est_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../SigProc_FIX.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/stack_alloc.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../debug.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/pitch.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/modes.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/celt.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/../opus_custom.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/../opus_defines.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/entenc.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/entcode.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/ecintrin.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/entdec.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/mdct.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/kiss_fft.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libopus/silk/fixed/../../celt/cpu_support.h

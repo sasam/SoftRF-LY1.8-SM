@@ -1,0 +1,61 @@
+profiles:
+  esp32s3-release:
+    fqbn: esp32:esp32:esp32s3:UploadSpeed=921600,USBMode=default,CDCOnBoot=default,MSCOnBoot=default,DFUOnBoot=default,UploadMode=cdc,CPUFreq=80,FlashMode=qio,FlashSize=8M,PartitionScheme=default_8MB,DebugLevel=none,PSRAM=disabled,LoopCore=1,EventsCore=1,EraseFlash=all,JTAGAdapter=default
+    platforms:
+      - platform: esp32:esp32 (2.0.9)
+        platform_index_url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+    libraries:
+      - Adafruit NeoPixel (1.1.6)
+      - TinyGPS++ (1.0.0)
+      - nRF905 (2.0)
+      - Time (1.5)
+      - Basicmac LoRaWAN stack (2.1.0)
+      - dir: /home/sasa/Arduino/libraries/CRC
+      - dir: /home/sasa/Arduino/libraries/OGN
+      - RadioLib (7.1.0)
+      - dump978 (1.0)
+      - libmodes (1.0)
+      - dir: /home/sasa/Arduino/libraries/mavlink
+      - dir: /home/sasa/Arduino/libraries/aircraft
+      - Adafruit BMP085 Library (1.0.0)
+      - Adafruit BMP280 Library (1.0.2)
+      - Adafruit MPL3115A2 Library (1.1.0)
+      - ArduinoJson (5.13.3)
+      - GxEPD2 (1.2.4)
+      - Adafruit GFX Library (1.4.2)
+      - U8g2 (2.21.8)
+      - id_open (1.2)
+      - dir: /home/sasa/Arduino/libraries/LibAPRS_ESP32
+      - SA818 (1.0.0)
+      - dir: /home/sasa/Arduino/libraries/flashrom
+      - AXP202X_Library (1.1.3)
+      - XPowersLib (0.1.4)
+      - PCF8563_Library (1.0.0)
+      - dir: /home/sasa/Arduino/libraries/ESP32_I2C_Bus
+      - TFT_eSPI (2.4.61)
+      - dir: /home/sasa/Arduino/libraries/ADC
+      - Adafruit SPIFlash (4.1.1)
+      - SdFat - Adafruit Fork (2.2.54)
+      - uCDB (0.5.5)
+      - SensorLib (0.3.1)
+      - MPU9250 (0.4.8)
+      - PCA9557-arduino (1.0.0)
+      - ESP8266Audio (1.9.9)
+      - AceButton (1.3.3)
+      - dir: /home/sasa/Arduino/libraries/adsb_encoder
+      - NMEA library (3.0.0+arduino)
+      - FlightRecorder (1.0)
+      - IniFile (1.3.0)
+      - dir: /home/sasa/Arduino/libraries/MD5
+      - U8g2_for_Adafruit_GFX (1.8.0)
+      - dir: /home/sasa/Arduino/libraries/jQuery
+      - WiFiWebServer (1.10.1)
+      - Functional-Vlpp (1.0.2)
+    programmer: ""
+    port: ""
+    port_config:
+      baudrate: "115200"
+      bits: "8"
+      parity: none
+      stop_bits: one
+default_profile: esp32s3-release

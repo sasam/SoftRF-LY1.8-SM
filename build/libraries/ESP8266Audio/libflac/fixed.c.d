@@ -1,0 +1,18 @@
+/home/sasa/Arduino/SoftRF-LY1.8/build/libraries/ESP8266Audio/libflac/fixed.c.o: \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/fixed.c \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/config.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/share/compat.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/bitmath.h \
+ /home/sasa/.arduino15/packages/esp32/hardware/esp32/2.0.9/cores/esp32/pgmspace.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../FLAC/ordinals.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../FLAC/assert.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../share/compat.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/fixed.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../config.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/cpu.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/float.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../FLAC/format.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../FLAC/export.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/../FLAC/ordinals.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/private/macros.h \
+ /home/sasa/Arduino/libraries/ESP8266Audio/src/libflac/FLAC/assert.h
