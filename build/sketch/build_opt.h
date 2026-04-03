@@ -1,2 +1,0 @@
-#line 1 "/home/sasa/Arduino/SoftRF-LY1.8/build_opt.h"
--DSOFTRF_SKETCH -DSERIAL_TX_BUFFER_SIZE=256 -DSERIAL_RX_BUFFER_SIZE=256

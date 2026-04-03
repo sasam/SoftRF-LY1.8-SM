@@ -1,0 +1,28 @@
+# Arduino build folders
+build/
+cmake-build*/
+CMakeFiles/
+CMakeCache.txt
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# VSCode
+.vscode/
+
+# Temporary files
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.d
+*.a
+
+# Backup files
+*~
+*.swp
+
