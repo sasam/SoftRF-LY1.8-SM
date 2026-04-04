@@ -156,7 +156,7 @@ static bool NMEA_force_GP_talker(char *buf)
 
   buf[2] = 'P';
   star[1] = '\0';
-  NMEA_add_checksum(buf, NMEA_BUFFER_SIZE - strlen(buf));
+  NMEA_add_checksum(buf, NMEA_BUFFER_SIZE - (size_t)(star + 1 - buf));
 
   return true;
 }
@@ -354,7 +354,9 @@ void NMEA_fini()
 
 void NMEA_Out(uint8_t dest, byte *buf, size_t size, bool nl)
 {
-  NMEA_force_GP_talker((char *) buf);
+  if (settings->nmea_fgp) {
+    NMEA_force_GP_talker((char *) buf);
+  }
   switch (dest)
   {
   case NMEA_UART:

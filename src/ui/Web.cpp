@@ -618,6 +618,13 @@ char *Settings_content() {
 </td>\
 </tr>\
 <tr>\
+<th align=left>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ForceGP</th>\
+<td align=right>\
+<input type='radio' name='nmea_fgp' value='0' %s>Off\
+<input type='radio' name='nmea_fgp' value='1' %s>On\
+</td>\
+</tr>\
+<tr>\
 <th align=left>NMEA output</th>\
 <td align=right>\
 <select name='nmea_out'>\
@@ -628,6 +635,7 @@ char *Settings_content() {
   (!settings->nmea_p ? "checked" : "") , (settings->nmea_p ? "checked" : ""),
   (!settings->nmea_l ? "checked" : "") , (settings->nmea_l ? "checked" : ""),
   (!settings->nmea_s ? "checked" : "") , (settings->nmea_s ? "checked" : ""),
+  (!settings->nmea_fgp ? "checked" : "") , (settings->nmea_fgp ? "checked" : ""),
   (settings->nmea_out == NMEA_OFF  ? "selected" : ""), NMEA_OFF,
   (settings->nmea_out == NMEA_UART ? "selected" : ""), NMEA_UART,
   (settings->nmea_out == NMEA_UDP  ? "selected" : ""), NMEA_UDP);
@@ -921,6 +929,7 @@ PSTR("<html>\
 <tr><th align=left>NMEA Private</th><td align=right>%s</td></tr>\
 <tr><th align=left>NMEA Legacy</th><td align=right>%s</td></tr>\
 <tr><th align=left>NMEA Sensors</th><td align=right>%s</td></tr>\
+<tr><th align=left>NMEA ForceGP</th><td align=right>%s</td></tr>\
 <tr><th align=left>NMEA Out</th><td align=right>%d</td></tr>\
 <tr><th align=left>GDL90</th><td align=right>%d</td></tr>\
 <tr><th align=left>DUMP1090</th><td align=right>%d</td></tr>\
@@ -939,6 +948,7 @@ PSTR("<html>\
   settings->volume, settings->pointer, settings->bluetooth,
   BOOL_STR(settings->nmea_g), BOOL_STR(settings->nmea_p),
   BOOL_STR(settings->nmea_l), BOOL_STR(settings->nmea_s),
+  BOOL_STR(settings->nmea_fgp),
   settings->nmea_out, settings->gdl90, settings->d1090,
   BOOL_STR(settings->stealth), BOOL_STR(settings->no_track),
   settings->power_save, settings->freq_corr,
@@ -1071,6 +1081,8 @@ void handleInput() {
       settings->nmea_l = server.arg(i).toInt();
     } else if (server.argName(i).equals("nmea_s")) {
       settings->nmea_s = server.arg(i).toInt();
+    } else if (server.argName(i).equals("nmea_fgp")) {
+      settings->nmea_fgp = server.arg(i).toInt();
     } else if (server.argName(i).equals("nmea_out")) {
       settings->nmea_out = server.arg(i).toInt();
     } else if (server.argName(i).equals("gdl90")) {
