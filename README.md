@@ -19,7 +19,6 @@ arduino-cli compile /home/sasa/Arduino/SoftRF-LY1.8 \
   -b "esp32:esp32:esp32s3:USBMode=default,CDCOnBoot=cdc,CPUFreq=80,FlashSize=8M,PartitionScheme=default_8MB,EraseFlash=all" \
   --jobs 12 \
   --verbose
-#  --clean
 
 ## Supported Devices
 
