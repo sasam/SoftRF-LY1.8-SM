@@ -156,7 +156,7 @@ static bool NMEA_force_GP_talker(char *buf)
 
   buf[2] = 'P';
   star[1] = '\0';
-  NMEA_add_checksum(buf, NMEA_BUFFER_SIZE - (size_t)(star + 1 - buf));
+  NMEA_add_checksum(buf, NMEA_BUFFER_SIZE - strlen(buf));
 
   return true;
 }
