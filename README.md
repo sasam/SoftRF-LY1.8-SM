@@ -12,14 +12,14 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
 - Firmware version set to 1.8SM
 
 ## Build Script
-'''
+```
 arduino-cli compile /home/sasa/Arduino/SoftRF-LY1.8 \
   -e \
   --libraries /home/sasa/Arduino/libraries_ly \
   -b "esp32:esp32:esp32s3:USBMode=default,CDCOnBoot=cdc,CPUFreq=80,FlashSize=8M,PartitionScheme=default_8MB,EraseFlash=all" \
   --jobs 12 \
-  --verbose '''
-
+  --verbose 
+```
 ## Supported Devices
 
 - Midi Edition (HE): https://github.com/lyusupov/SoftRF/wiki/Midi-Edition
