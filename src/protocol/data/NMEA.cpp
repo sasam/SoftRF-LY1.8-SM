@@ -354,9 +354,7 @@ void NMEA_fini()
 
 void NMEA_Out(uint8_t dest, byte *buf, size_t size, bool nl)
 {
-  if (NMEA_force_GP_talker((char *) buf)) {
-    size = strlen((char *) buf);
-  }
+  NMEA_force_GP_talker((char *) buf);
   switch (dest)
   {
   case NMEA_UART:
