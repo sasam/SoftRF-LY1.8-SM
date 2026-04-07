@@ -15,9 +15,12 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
 - Added screen ON / OFF control through the web interface
 - The screen is controlled through GPIO21
 - Two links/buttons are available on the main web status page:
-	- `Screen ON`
-	- `Screen OFF`
+  - `Screen ON`
+  - `Screen OFF`
 - This allows the display to be turned off during operation in order to reduce power consumption
+- Measured current reduction with screen OFF is approximately 20 mA
+  - Screen ON: about 180 mA
+  - Screen OFF: about 160 mA
 
 ## Build Script
 ```
