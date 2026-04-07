@@ -4,14 +4,20 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
 
 ## Modifications
 
-- Adjustments for ESP32-S3 based devices (e.g., HE/Midi, T-Beam/Prime MkII):
-  - NMEA $G... sequence conversion: any sentence starting with $G but not $GP is converted to $GPx
-    - Ensures compatibility with LXNav S7 variometers, which previously ignored $G... sentences that were not $GP...
-  - Checksum recalculated to maintain valid NMEA format
-  - ForceGP option implemented in the web interface: can be enabled or disabled by the user
-- Firmware version set to 1.8SM
+### NMEA / LXNAV compatibility
+- Adjustments for ESP32-S3 based devices (for example HE/Midi and T-Beam/Prime MkII)
+- NMEA `$G...` sequence conversion: any sentence starting with `$G` but not `$GP` is converted to `$GP...`
+- Checksum is recalculated after conversion to keep the NMEA sentence valid
+- This improves compatibility with LXNav variometers that accept only `GPx` NMEA talker IDs
+- `ForceGP` option implemented in the web interface, so the conversion can be enabled or disabled by the user
 
-## Build Script
+### Screen control (Heltec Wireless Tracker / HE-Midi)
+- Added screen ON / OFF control through the web interface
+- The screen is controlled through GPIO21
+- Two links/buttons are available on the main web status page:
+	- `Screen ON`
+	- `Screen OFF`
+- This allows the display to be turned off during operation in order to reduce power consumption
 ```
 arduino-cli compile /home/sasa/Arduino/SoftRF-LY1.8 \
   -e \

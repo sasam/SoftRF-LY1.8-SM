@@ -24,6 +24,10 @@
 #include "../driver/RF.h"
 
 #include "Web.h"
+extern void Screen_on(void);
+extern void Screen_off(void);
+extern bool Screen_is_on(void);
+
 #include "../driver/Baro.h"
 
 #include "../driver/LED.h"
@@ -127,8 +131,9 @@ char *Root_content() {
   char str_lon[16];
   char str_alt[16];
   char str_Vcc[8];
+  const char *str_screen = Screen_is_on() ? "ON" : "OFF";
 
-  size_t size = 2420;
+  size_t size = 2560;
   char *offset;
   size_t len = 0;
 
@@ -175,6 +180,8 @@ char *Root_content() {
  "<tr><th align=left>Free memory</th><td align=right>%u</td></tr>"
 #endif /* RASPBERRY_PI */
  "<tr><th align=left>Battery voltage</th><td align=right><font color=%s>%s</font></td></tr>"
+"<tr><th align=left>Screen</th><td align=right>%s</td></tr>"
+"<tr><th align=left>Screen control</th><td align=right><a href='/screen?state=on'>ON</a> | <a href='/screen?state=off'>OFF</a></td></tr>"
 #if defined(USE_USB_HOST) && defined(CONFIG_IDF_TARGET_ESP32S3)
   "<tr><th align=left>USB client</th><td align=right>%s %s</td></tr>"
 #endif /* USE_USB_HOST */
@@ -220,7 +227,7 @@ char *Root_content() {
 #if !defined(RASPBERRY_PI) && !defined(LUCKFOX_LYRA)
     SoC->getFreeHeap(),
 #endif /* RASPBERRY_PI */
-    low_voltage ? "red" : "green", str_Vcc,
+    low_voltage ? "red" : "green", str_Vcc,str_screen,
 #if defined(USE_USB_HOST) && defined(CONFIG_IDF_TARGET_ESP32S3)
     ESP32_USB_Serial.connected ? supported_USB_devices[ESP32_USB_Serial.index].first_name : "",
     ESP32_USB_Serial.connected ? supported_USB_devices[ESP32_USB_Serial.index].last_name  : "N/A",
@@ -1346,6 +1353,21 @@ void Web_setup()
   server.on ( "/inline", []() {
     server.send ( 200, "text/plain", "this works as well" );
   } );
+
+server.on("/screen", []() {
+  if (server.hasArg("state")) {
+    String state = server.arg("state");
+
+    if (state.equals("on")) {
+      Screen_on();
+    } else if (state.equals("off")) {
+      Screen_off();
+    }
+  }
+
+  server.sendHeader("Location", String("/"));
+  server.send(302, "text/plain", "");
+});
 
   server.onNotFound ( handleNotFound );
 

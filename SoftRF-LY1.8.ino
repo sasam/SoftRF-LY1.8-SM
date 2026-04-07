@@ -142,6 +142,29 @@ hardware_info_t hw_info = {
 unsigned long LEDTimeMarker = 0;
 unsigned long ExportTimeMarker = 0;
 
+#define TRACKER_BL_PIN 21
+
+static bool screen_on = true;
+
+void Screen_on(void)
+{
+  digitalWrite(TRACKER_BL_PIN, HIGH);
+  screen_on = true;
+  Serial.println("Screen -> ON");
+}
+
+void Screen_off(void)
+{
+  digitalWrite(TRACKER_BL_PIN, LOW);
+  screen_on = false;
+  Serial.println("Screen -> OFF");
+}
+
+bool Screen_is_on(void)
+{
+  return screen_on;
+}
+
 void setup()
 {
   rst_info *resetInfo;
@@ -207,6 +230,9 @@ void setup()
   SoC->swSer_enableRx(false);
 
   LED_setup();
+
+  pinMode(TRACKER_BL_PIN, OUTPUT);
+  Screen_on();
 
   WiFi_setup();
 
