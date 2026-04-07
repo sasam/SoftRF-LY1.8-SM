@@ -18,6 +18,8 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
 	- `Screen ON`
 	- `Screen OFF`
 - This allows the display to be turned off during operation in order to reduce power consumption
+
+## Build Script
 ```
 arduino-cli compile /home/sasa/Arduino/SoftRF-LY1.8 \
   -e \
