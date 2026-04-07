@@ -119,6 +119,7 @@
 #define DEBUG 0
 #define DEBUG_TIMING 0
 
+
 #define isTimeToDisplay() (millis() - LEDTimeMarker     > 1000)
 #define isTimeToExport()  (millis() - ExportTimeMarker  > 1000)
 
@@ -141,6 +142,11 @@ hardware_info_t hw_info = {
 
 unsigned long LEDTimeMarker = 0;
 unsigned long ExportTimeMarker = 0;
+
+#define TRACKER_BL_PIN 21
+
+static unsigned long bl_marker = 0;
+static bool bl_on = true;
 
 void setup()
 {
@@ -207,6 +213,12 @@ void setup()
   SoC->swSer_enableRx(false);
 
   LED_setup();
+
+pinMode(TRACKER_BL_PIN, OUTPUT);
+digitalWrite(TRACKER_BL_PIN, HIGH);   // ako ispadne obrnuto, stavi LOW
+
+Serial.println("GPIO21 backlight test init");
+Serial.println("GPIO21 backlight -> ON");
 
   WiFi_setup();
 
@@ -293,6 +305,15 @@ void loop()
 
   // Show status info on tiny OLED display
   SoC->Display_loop();
+
+if (millis() - bl_marker >= 30000) {
+  bl_marker = millis();
+  bl_on = !bl_on;
+  digitalWrite(TRACKER_BL_PIN, bl_on ? HIGH : LOW);
+
+  Serial.print("GPIO21 backlight -> ");
+  Serial.println(bl_on ? "ON" : "OFF");
+}
 
   // battery status LED
   LED_loop();
