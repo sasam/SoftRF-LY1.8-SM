@@ -106,6 +106,14 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
   return rval;
 }
 
+static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
+{
+  /* Privremeni wrapper:
+     dok još nemamo wind/projection logiku,
+     Latest koristi postojeći vector alarm kao fallback. */
+  return Alarm_Vector(this_aircraft, fop);
+}
+
 /*
  * "Legacy" method is based on short history of 2D velocity vectors (NS/EW)
  */
@@ -229,7 +237,7 @@ void Traffic_setup()
     Alarm_Level = &Alarm_Vector;
     break;
   case TRAFFIC_ALARM_LATEST:
-    Alarm_Level = &Alarm_Legacy;
+    Alarm_Level = &Alarm_Latest;
     break;
   case TRAFFIC_ALARM_DISTANCE:
   default:
