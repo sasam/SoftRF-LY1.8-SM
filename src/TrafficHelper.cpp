@@ -17,6 +17,7 @@
  */
 
 #include "TrafficHelper.h"
+#include "Wind.h"
 #include "driver/EEPROM.h"
 #include "driver/RF.h"
 #include "driver/GNSS.h"
