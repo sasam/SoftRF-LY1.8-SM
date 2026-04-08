@@ -21,6 +21,7 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
 - Measured current reduction with screen OFF is approximately 20 mA
   - Screen ON: about 180 mA
   - Screen OFF: about 160 mA
+  - Screen OFF, Wi-Fi OFF: about 85 mA
 
 ## Build Script
 ```
