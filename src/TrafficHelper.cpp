@@ -228,7 +228,7 @@ void Traffic_setup()
   case TRAFFIC_ALARM_VECTOR:
     Alarm_Level = &Alarm_Vector;
     break;
-  case TRAFFIC_ALARM_LEGACY:
+  case TRAFFIC_ALARM_LATEST:
     Alarm_Level = &Alarm_Legacy;
     break;
   case TRAFFIC_ALARM_DISTANCE:

@@ -465,6 +465,7 @@ char *Settings_content() {
 <option %s value='%d'>None</option>\
 <option %s value='%d'>Distance</option>\
 <option %s value='%d'>Vector</option>\
+<option %s value='%d'>Latest</option>\
 </select>\
 </td>\
 </tr>\
@@ -522,6 +523,7 @@ char *Settings_content() {
   (settings->alarm == TRAFFIC_ALARM_NONE ? "selected" : ""),  TRAFFIC_ALARM_NONE,
   (settings->alarm == TRAFFIC_ALARM_DISTANCE ? "selected" : ""),  TRAFFIC_ALARM_DISTANCE,
   (settings->alarm == TRAFFIC_ALARM_VECTOR ? "selected" : ""),  TRAFFIC_ALARM_VECTOR,
+  (settings->alarm == TRAFFIC_ALARM_LATEST ? "selected" : ""), TRAFFIC_ALARM_LATEST,
   (settings->txpower == RF_TX_POWER_FULL ? "selected" : ""),  RF_TX_POWER_FULL,
   (settings->txpower == RF_TX_POWER_LOW ? "selected" : ""),  RF_TX_POWER_LOW,
   (settings->txpower == RF_TX_POWER_OFF ? "selected" : ""),  RF_TX_POWER_OFF,
