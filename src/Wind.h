@@ -1,7 +1,7 @@
 #ifndef WIND_H
 #define WIND_H
 
-#include "SoftRF.h"
+#include "../SoftRF.h"
 
 extern float wind_best_ns;
 extern float wind_best_ew;

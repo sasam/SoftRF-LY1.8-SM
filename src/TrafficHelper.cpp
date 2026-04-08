@@ -109,9 +109,12 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
 
 static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
 {
-  /* Privremeni wrapper:
-     dok još nemamo wind/projection logiku,
-     Latest koristi postojeći vector alarm kao fallback. */
+  Estimate_Wind();
+  project_this(this_aircraft);
+  project_that(fop);
+
+  /* Za sada zadržavamo postojeću vector odluku,
+     ali Latest već prolazi kroz projection sloj. */
   return Alarm_Vector(this_aircraft, fop);
 }
 

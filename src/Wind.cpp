@@ -1,5 +1,5 @@
+#include <Arduino.h>
 #include <math.h>
-#include "SoftRF.h"
 #include "Wind.h"
 
 float wind_best_ns = 0.0f;
@@ -7,9 +7,11 @@ float wind_best_ew = 0.0f;
 float wind_speed = 0.0f;
 float wind_direction = 0.0f;
 
+static constexpr float KNOT_TO_MPS = 0.51444444f;
+
 static void fill_projected_track(ufo_t *fop, float heading_deg, float speed_knots)
 {
-  float speed_ms = speed_knots * _GPS_MPS_PER_KNOT;
+  float speed_ms = speed_knots * KNOT_TO_MPS;
   float rad = heading_deg * DEG_TO_RAD;
 
   float vn = cosf(rad) * speed_ms;
