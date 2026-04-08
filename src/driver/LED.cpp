@@ -28,9 +28,40 @@ extern uint32_t tx_packets_counter, rx_packets_counter;
 static uint32_t prev_tx_packets_counter = 0;
 static uint32_t prev_rx_packets_counter = 0;
 
-#define isTimeToToggle() (millis() - status_LED_TimeMarker > 300)
 static int status_LED = SOC_UNUSED_PIN;
-static unsigned long status_LED_TimeMarker = 0;
+
+#define STATUS_LED_LOWBAT_PERIOD_MS   500U
+#define STATUS_LED_LOWBAT_ON_MS        20U
+
+#define STATUS_LED_NOFIX_PERIOD_MS   3000U
+#define STATUS_LED_NOFIX_ON_MS         15U
+
+#define STATUS_LED_FIX_PERIOD_MS     4000U
+#define STATUS_LED_FIX_PULSE1_MS       15U
+#define STATUS_LED_FIX_PULSE2_START   220U
+#define STATUS_LED_FIX_PULSE2_END     232U
+
+static void StatusLED_write(bool on)
+{
+  digitalWrite(status_LED, on ? LED_STATE_ON : !LED_STATE_ON);
+}
+
+static bool StatusLED_lowbat_pattern(uint32_t now_ms)
+{
+  return (now_ms % STATUS_LED_LOWBAT_PERIOD_MS) < STATUS_LED_LOWBAT_ON_MS;
+}
+
+static bool StatusLED_heltec_pattern(uint32_t now_ms)
+{
+  if (isValidFix()) {
+    uint32_t phase = now_ms % STATUS_LED_FIX_PERIOD_MS;
+    return (phase < STATUS_LED_FIX_PULSE1_MS) ||
+           (phase >= STATUS_LED_FIX_PULSE2_START &&
+            phase <  STATUS_LED_FIX_PULSE2_END);
+  } else {
+    return (now_ms % STATUS_LED_NOFIX_PERIOD_MS) < STATUS_LED_NOFIX_ON_MS;
+  }
+}
 
 // IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
 // pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
@@ -50,7 +81,7 @@ void LED_setup() {
   if (status_LED != SOC_UNUSED_PIN) {
     pinMode(status_LED, OUTPUT);
     /* Indicate positive power supply */
-    digitalWrite(status_LED, LED_STATE_ON);
+    StatusLED_write(true);
   }
 }
 
@@ -200,17 +231,27 @@ void LED_DisplayTraffic() {
 }
 
 void LED_loop() {
-  if (status_LED != SOC_UNUSED_PIN) {
-    if (Battery_voltage() > Battery_threshold() ) {
-      /* Indicate positive power supply */
-      if (digitalRead(status_LED) != LED_STATE_ON) {
-        digitalWrite(status_LED, LED_STATE_ON);
-      }
-    } else {
-      if (isTimeToToggle()) {
-        digitalWrite(status_LED, !digitalRead(status_LED) ? HIGH : LOW);  // toggle state
-        status_LED_TimeMarker = millis();
-      }
-    }
+  if (status_LED == SOC_UNUSED_PIN) {
+    return;
   }
+
+  uint32_t now_ms = millis();
+
+  /* Low battery always has top priority */
+  if (Battery_voltage() <= Battery_threshold()) {
+    StatusLED_write(StatusLED_lowbat_pattern(now_ms));
+    return;
+  }
+
+  /* Heltec Wireless Tracker / HE-Midi:
+   * no fix   -> single short blink
+   * valid fix -> double blink
+   */
+  if (hw_info.model == SOFTRF_MODEL_MIDI) {
+    StatusLED_write(StatusLED_heltec_pattern(now_ms));
+    return;
+  }
+
+  /* Legacy behavior for other boards */
+  StatusLED_write(true);
 }
