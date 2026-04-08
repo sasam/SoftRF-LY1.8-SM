@@ -1,17 +1,17 @@
-# SoftRF LY1.8 Firmware (by Linar, modified)
+# SoftRF 1.8 Firmware (by Linar Yusupov, modified)
 
 This repository contains the SoftRF LY1.8 firmware source code, originally developed by Linar Yusupov (https://github.com/lyusupov/SoftRF/tree/master/software/firmware/source/SoftRF).
 
 ## Modifications
 
-### NMEA / LXNAV compatibility
+#### NMEA / LXNAV compatibility
 - Adjustments for ESP32-S3 based devices (for example HE/Midi and T-Beam/Prime MkII)
 - NMEA `$G...` sequence conversion: any sentence starting with `$G` but not `$GP` is converted to `$GP...`
 - Checksum is recalculated after conversion to keep the NMEA sentence valid
 - This improves compatibility with LXNav variometers that accept only `GPx` NMEA talker IDs
 - `ForceGP` option implemented in the web interface, so the conversion can be enabled or disabled by the user
 
-### Screen control (Heltec Wireless Tracker / HE-Midi)
+#### Screen control (Heltec Wireless Tracker / HE-Midi)
 - Added screen ON / OFF control through the web interface
 - The screen is controlled through GPIO21
 - Two links/buttons are available on the main web status page:
@@ -22,6 +22,16 @@ This repository contains the SoftRF LY1.8 firmware source code, originally devel
   - Screen ON: about 180 mA
   - Screen OFF: about 160 mA
   - Screen OFF, Wi-Fi OFF: about 85 mA
+
+#### Status LED blink tuning
+
+- Implemented and tested on Heltec / HE-Midi.
+- The white status LED is mapped to GPIO18. Its blink behavior was retuned to reduce visible brightness and average LED on-time. Behavior on other boards has not been verified.
+- In the current implementation:
+  - low battery is indicated by a repeating short pulse
+  - no GNSS fix is indicated by a single short pulse with a longer interval
+  - valid GNSS fix is indicated by a double short pulse with a longer interval
+- The GNSS indication uses very short pulses, and the low-battery indication was updated to use short-pulse blinking as well.
 
 ## Build Script
 ```
