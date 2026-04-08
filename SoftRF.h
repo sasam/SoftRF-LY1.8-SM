@@ -116,6 +116,10 @@ typedef struct UFO {
     uint8_t   raw[34];
     time_t    timestamp;
 
+    uint32_t  gnsstime_ms;
+    uint32_t  prevtime_ms;
+    uint32_t  projtime_ms;
+
     uint8_t   protocol;
 
     uint32_t  addr;
@@ -124,17 +128,26 @@ typedef struct UFO {
     float     longitude;
     float     altitude;
     float     pressure_altitude;
+
     float     course;     /* CoG */
+    float     heading;    /* air-relative heading, default = course */
     float     speed;      /* ground speed in knots */
     float     turnrate;   /* deg/sec, ground-reference */
 
     uint8_t   aircraft_type;
 
     float     vs; /* feet per minute */
+    float     prevaltitude;
+    float     prevcourse;
+    float     prevheading;
+
     uint8_t   airborne; /* 0/1/2 style status from latest/v7 path */
     int8_t    circling;  /* 1 = right, -1 = left, 0 = not circling */
     bool      stealth;
     bool      no_track;
+
+    int16_t   air_ns[6];
+    int16_t   air_ew[6];
 
     int8_t    ns[4];
     int8_t    ew[4];

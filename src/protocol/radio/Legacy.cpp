@@ -238,6 +238,7 @@ static bool legacy_v6_decode(void *legacy_pkt, ufo_t *this_aircraft, ufo_t *fop)
     fop->altitude = (float) alt - geo_separ;
     fop->speed = speed4 / (4 * _GPS_MPS_PER_KNOT);
     fop->course = direction;
+    fop->heading = fop->course;
     fop->vs = ((float) vs10) * (_GPS_FEET_PER_METER * 6.0);
     fop->aircraft_type = pkt->aircraft_type;
     fop->turnrate = 0.0f;
@@ -538,6 +539,7 @@ bool legacy_decode(void *legacy_pkt, ufo_t *this_aircraft, ufo_t *fop) {
 
     float course       = pkt->course;
     fop->course        = course / 2;
+    fop->heading       = fop->course;
 
     int16_t turn20 = (int16_t) descale(pkt->turn, 6, 2);
     fop->turnrate = 0.05f * (float) turn20;   /* deg/sec */

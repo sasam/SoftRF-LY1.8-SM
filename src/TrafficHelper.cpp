@@ -200,7 +200,7 @@ void ParseData()
     Hex2Bin(TxDataTemplate, RxBuffer);
 #endif
 
-    memset(fo.raw, 0, sizeof(fo.raw));
+    memset(&fo, 0, sizeof(fo));
     memcpy(fo.raw, RxBuffer, rx_size);
 
     if (settings->nmea_p) {
