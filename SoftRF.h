@@ -126,10 +126,13 @@ typedef struct UFO {
     float     pressure_altitude;
     float     course;     /* CoG */
     float     speed;      /* ground speed in knots */
+    float     turnrate;   /* deg/sec, ground-reference */
+
     uint8_t   aircraft_type;
 
     float     vs; /* feet per minute */
-
+    uint8_t   airborne; /* 0/1/2 style status from latest/v7 path */
+    int8_t    circling;  /* 1 = right, -1 = left, 0 = not circling */
     bool      stealth;
     bool      no_track;
 
