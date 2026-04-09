@@ -90,6 +90,16 @@ void Estimate_Wind(void)
   float dcourse = wrap_180(self->course - self->prevcourse);
   self->turnrate = dcourse / dt;
 
+  if (fabsf(self->turnrate) >= 2.0f) {
+    own_cumul_turn += dcourse;
+    own_last_turn_ms = now;
+  } else if (own_last_turn_ms != 0 && (now - own_last_turn_ms) > 1500) {
+    own_cumul_turn *= 0.90f;
+    if (fabsf(own_cumul_turn) < 45.0f) {
+      own_cumul_turn = 0.0f;
+    }
+  }
+
   if (self->speed < 5.0f) {
     self->airborne = 1;
     self->circling = 0;
@@ -100,9 +110,11 @@ void Estimate_Wind(void)
   } else {
     self->airborne = 2;
 
-    if (fabsf(self->turnrate) >= 2.0f) {
+    if (fabsf(own_cumul_turn) >= 180.0f) {
       self->airborne = 3;
-      self->circling = (self->turnrate > 0.0f) ? 1 : -1;
+      self->circling = (own_cumul_turn > 0.0f) ? 1 : -1;
+    } else if (own_last_turn_ms != 0 && (now - own_last_turn_ms) <= 2000) {
+      /* zadrži postojeći circling state kratko vrijeme */
     } else {
       self->circling = 0;
     }
