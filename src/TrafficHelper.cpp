@@ -231,6 +231,24 @@ bool Traffic_Add(ufo_t *fop)
   return false;
 }
 
+static void Traffic_InheritHistory(ufo_t *fop)
+{
+  for (int i = 0; i < MAX_TRACKING_OBJECTS; i++) {
+    if (Container[i].addr == fop->addr) {
+      fop->prevtime_ms  = Container[i].gnsstime_ms;
+      fop->projtime_ms  = Container[i].projtime_ms;
+      fop->prevcourse   = Container[i].course;
+      fop->prevheading  = Container[i].heading;
+      fop->prevaltitude = Container[i].altitude;
+
+      if (fop->heading == 0.0f) {
+        fop->heading = Container[i].heading;
+      }
+      return;
+    }
+  }
+}
+
 void ParseData()
 {
     size_t rx_size = RF_Payload_Size(settings->rf_protocol);
@@ -261,6 +279,8 @@ void ParseData()
 
     if (protocol_decode && (*protocol_decode)((void *) RxBuffer, &ThisAircraft, &fo)) {
       fo.rssi = RF_last_rssi;
+      fo.gnsstime_ms = millis();
+      Traffic_InheritHistory(&fo);
       Traffic_Update(&fo);
       Traffic_Add(&fo);
     }

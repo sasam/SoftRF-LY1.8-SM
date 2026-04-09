@@ -128,9 +128,12 @@ void Estimate_Wind(void)
     if (self->circling != 0) {
       wind_best_ns = 0.8f * wind_best_ns + 0.2f * est_ns;
       wind_best_ew = 0.8f * wind_best_ew + 0.2f * est_ew;
-    } else {
+    } else if (self->speed < 5.0f) {
       wind_best_ns = 0.0f;
       wind_best_ew = 0.0f;
+    } else {
+      wind_best_ns *= 0.98f;
+      wind_best_ew *= 0.98f;
     }
 
     wind_speed = sqrtf(wind_best_ns * wind_best_ns +
@@ -173,16 +176,33 @@ void project_that(ufo_t *fop)
     return;
   }
 
-  fop->prevtime_ms = fop->gnsstime_ms;
-  fop->projtime_ms = fop->gnsstime_ms;
+  uint32_t now = fop->gnsstime_ms;
+  float dt = 0.0f;
 
-  fop->prevcourse = fop->course;
-  fop->prevheading = fop->heading;
-  fop->prevaltitude = fop->altitude;
+  if (now != 0 && fop->prevtime_ms != 0 && now > fop->prevtime_ms) {
+    dt = 0.001f * (float)(now - fop->prevtime_ms);
+  }
 
-  if (fop->heading == 0.0f && fop->course != 0.0f) {
+  if (fop->heading == 0.0f) {
+    fop->heading = (fop->prevheading != 0.0f) ? fop->prevheading : fop->course;
+  }
+
+  if (dt > 0.05f && dt < 10.0f) {
+    if (fop->circling == 0) {
+      fop->heading = fop->course;
+    } else {
+      float base = (fop->prevheading != 0.0f) ? fop->prevheading : fop->course;
+      fop->heading = wrap_360(base + fop->turnrate * dt);
+    }
+  } else if (fop->circling == 0) {
     fop->heading = fop->course;
   }
 
+  fop->projtime_ms = now;
   fill_projected_track(fop, fop->heading, fop->speed);
+
+  fop->prevtime_ms = now;
+  fop->prevcourse = fop->course;
+  fop->prevheading = fop->heading;
+  fop->prevaltitude = fop->altitude;
 }
