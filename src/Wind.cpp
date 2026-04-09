@@ -148,9 +148,6 @@ void Estimate_Wind(void)
     if (self->circling != 0) {
       wind_best_ns = 0.8f * wind_best_ns + 0.2f * est_ns;
       wind_best_ew = 0.8f * wind_best_ew + 0.2f * est_ew;
-    } else if (self->speed < 5.0f) {
-      wind_best_ns = 0.0f;
-      wind_best_ew = 0.0f;
     } else {
       wind_best_ns *= 0.98f;
       wind_best_ew *= 0.98f;
