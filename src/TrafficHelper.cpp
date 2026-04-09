@@ -107,11 +107,36 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
   return rval;
 }
 
+static float Adj_alt_diff(ufo_t *this_aircraft, ufo_t *fop)
+{
+  float alt_diff = fop->altitude - this_aircraft->altitude;
+  float vsr = fop->vs - this_aircraft->vs;   /* fpm */
+
+  if (vsr > 2000.0f) vsr = 2000.0f;
+  if (vsr < -2000.0f) vsr = -2000.0f;
+
+  float alt_change_m = vsr * 0.05f;  /* ~10 s lookahead */
+
+  if (alt_diff > 0.0f && alt_change_m < 0.0f) {
+    alt_diff += alt_change_m;
+    if (alt_diff < 0.0f) alt_diff = 0.0f;
+  } else if (alt_diff < 0.0f && alt_change_m > 0.0f) {
+    alt_diff += alt_change_m;
+    if (alt_diff > 0.0f) alt_diff = 0.0f;
+  }
+
+  return alt_diff;
+}
+
 static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
 {
-  int alt_diff = (int)(fop->altitude - this_aircraft->altitude);
+  float adj_alt_diff = Adj_alt_diff(this_aircraft, fop);
 
-  if (abs(alt_diff) >= VERTICAL_SEPARATION) {
+  if (this_aircraft->airborne <= 1 || fop->airborne <= 1) {
+    return ALARM_LEVEL_NONE;
+  }
+
+  if (fabsf(adj_alt_diff) >= VERTICAL_SEPARATION) {
     return ALARM_LEVEL_NONE;
   }
 
