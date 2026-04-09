@@ -12,14 +12,25 @@ static constexpr float KNOT_TO_MPS = 0.51444444f;
 static void fill_projected_track(ufo_t *fop, float heading_deg, float speed_knots)
 {
   float speed_ms = speed_knots * KNOT_TO_MPS;
-  float rad = heading_deg * DEG_TO_RAD;
-
-  float vn = cosf(rad) * speed_ms;
-  float ve = sinf(rad) * speed_ms;
+  const float dt = 3.0f;   /* 6 točaka = 18 s unaprijed */
 
   for (int i = 0; i < 6; i++) {
-    fop->air_ns[i] = (int16_t) lroundf(vn);
-    fop->air_ew[i] = (int16_t) lroundf(ve);
+    float t = dt * (float)(i + 1);
+
+    float hdg = heading_deg + fop->turnrate * t;
+    while (hdg < 0.0f)   hdg += 360.0f;
+    while (hdg >= 360.0f) hdg -= 360.0f;
+
+    float rad = hdg * DEG_TO_RAD;
+
+    float vn_air = cosf(rad) * speed_ms;
+    float ve_air = sinf(rad) * speed_ms;
+
+    float vn_ground = vn_air + wind_best_ns;
+    float ve_ground = ve_air + wind_best_ew;
+
+    fop->air_ns[i] = (int16_t) lroundf(vn_ground);
+    fop->air_ew[i] = (int16_t) lroundf(ve_ground);
   }
 }
 

@@ -109,13 +109,51 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
 
 static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
 {
+  int alt_diff = (int)(fop->altitude - this_aircraft->altitude);
+
+  if (abs(alt_diff) >= VERTICAL_SEPARATION) {
+    return ALARM_LEVEL_NONE;
+  }
+
   Estimate_Wind();
   project_this(this_aircraft);
   project_that(fop);
 
-  /* Za sada zadržavamo postojeću vector odluku,
-     ali Latest već prolazi kroz projection sloj. */
-  return Alarm_Vector(this_aircraft, fop);
+  if (fabs(this_aircraft->turnrate) < 2.0f && fabs(fop->turnrate) < 2.0f) {
+    return Alarm_Vector(this_aircraft, fop);
+  }
+
+  float brad = radians(fop->bearing);
+  float rel_ns0 = cosf(brad) * fop->distance;
+  float rel_ew0 = sinf(brad) * fop->distance;
+
+  float min_distance = fop->distance;
+  const float dt = 3.0f;
+
+  for (int i = 0; i < 6; i++) {
+    float t = dt * (float)(i + 1);
+
+    float rel_ns = rel_ns0 +
+      ((float)fop->air_ns[i] - (float)this_aircraft->air_ns[i]) * t;
+    float rel_ew = rel_ew0 +
+      ((float)fop->air_ew[i] - (float)this_aircraft->air_ew[i]) * t;
+
+    float d = sqrtf(rel_ns * rel_ns + rel_ew * rel_ew);
+
+    if (d < min_distance) {
+      min_distance = d;
+    }
+  }
+
+  if (min_distance < ALARM_ZONE_URGENT) {
+    return ALARM_LEVEL_URGENT;
+  } else if (min_distance < ALARM_ZONE_IMPORTANT) {
+    return ALARM_LEVEL_IMPORTANT;
+  } else if (min_distance < ALARM_ZONE_LOW) {
+    return ALARM_LEVEL_LOW;
+  }
+
+  return ALARM_LEVEL_NONE;
 }
 
 /*
