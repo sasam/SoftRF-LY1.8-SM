@@ -9,6 +9,20 @@ float wind_direction = 0.0f;
 
 static constexpr float KNOT_TO_MPS = 0.51444444f;
 
+static float wrap_360(float deg)
+{
+  while (deg < 0.0f) deg += 360.0f;
+  while (deg >= 360.0f) deg -= 360.0f;
+  return deg;
+}
+
+static float wrap_180(float deg)
+{
+  while (deg <= -180.0f) deg += 360.0f;
+  while (deg > 180.0f) deg -= 360.0f;
+  return deg;
+}
+
 static void fill_projected_track(ufo_t *fop, float heading_deg, float speed_knots)
 {
   float speed_ms = speed_knots * KNOT_TO_MPS;
@@ -36,14 +50,101 @@ static void fill_projected_track(ufo_t *fop, float heading_deg, float speed_knot
 
 void Estimate_Wind(void)
 {
-  /* Minimalni, sigurni početak:
-     još ne procjenjujemo stvarni vjetar,
-     samo držimo neutralan wind model. */
-  wind_best_ns = 0.0f;
-  wind_best_ew = 0.0f;
-  wind_speed = 0.0f;
-  wind_direction = 0.0f;
-  project_this(&ThisAircraft);
+  ufo_t *self = &ThisAircraft;
+  uint32_t now = self->gnsstime_ms;
+
+  if (now == 0) {
+    return;
+  }
+
+  if (self->prevtime_ms == 0) {
+    self->prevtime_ms = now;
+    self->projtime_ms = now;
+    self->prevcourse = self->course;
+    self->prevheading = self->course;
+    self->prevaltitude = self->altitude;
+    self->heading = self->course;
+    self->turnrate = 0.0f;
+    self->airborne = (self->speed > 5.0f) ? 2 : 1;
+    self->circling = 0;
+    wind_best_ns = 0.0f;
+    wind_best_ew = 0.0f;
+    wind_speed = 0.0f;
+    wind_direction = 0.0f;
+    project_this(self);
+    return;
+  }
+
+  float dt = 0.001f * (float)(now - self->prevtime_ms);
+
+  if (dt <= 0.05f || dt > 10.0f) {
+    self->prevtime_ms = now;
+    self->projtime_ms = now;
+    self->prevcourse = self->course;
+    self->prevheading = self->heading;
+    self->prevaltitude = self->altitude;
+    project_this(self);
+    return;
+  }
+
+  float dcourse = wrap_180(self->course - self->prevcourse);
+  self->turnrate = dcourse / dt;
+
+  if (self->speed < 5.0f) {
+    self->airborne = 1;
+    self->circling = 0;
+    self->turnrate = 0.0f;
+    self->heading = self->course;
+    wind_best_ns = 0.0f;
+    wind_best_ew = 0.0f;
+  } else {
+    self->airborne = 2;
+
+    if (fabsf(self->turnrate) >= 2.0f) {
+      self->airborne = 3;
+      self->circling = (self->turnrate > 0.0f) ? 1 : -1;
+    } else {
+      self->circling = 0;
+    }
+
+    if (self->circling == 0) {
+      self->heading = self->course;
+    } else {
+      self->heading = wrap_360(self->prevheading + self->turnrate * dt);
+    }
+
+    float speed_ms = self->speed * KNOT_TO_MPS;
+    float cr = self->course * DEG_TO_RAD;
+    float hr = self->heading * DEG_TO_RAD;
+
+    float vn_ground = cosf(cr) * speed_ms;
+    float ve_ground = sinf(cr) * speed_ms;
+    float vn_air = cosf(hr) * speed_ms;
+    float ve_air = sinf(hr) * speed_ms;
+
+    float est_ns = vn_ground - vn_air;
+    float est_ew = ve_ground - ve_air;
+
+    if (self->circling != 0) {
+      wind_best_ns = 0.8f * wind_best_ns + 0.2f * est_ns;
+      wind_best_ew = 0.8f * wind_best_ew + 0.2f * est_ew;
+    } else {
+      wind_best_ns = 0.0f;
+      wind_best_ew = 0.0f;
+    }
+
+    wind_speed = sqrtf(wind_best_ns * wind_best_ns +
+                       wind_best_ew * wind_best_ew);
+    wind_direction = wrap_360(atan2f(wind_best_ew, wind_best_ns) * RAD_TO_DEG);
+  }
+
+  self->prevtime_ms = now;
+  self->projtime_ms = now;
+  self->prevcourse = self->course;
+  self->prevheading = self->heading;
+  self->prevaltitude = self->altitude;
+
+  project_this(self);
 }
 
 void project_this(ufo_t *this_aircraft)
