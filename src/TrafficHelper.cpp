@@ -115,8 +115,6 @@ static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
     return ALARM_LEVEL_NONE;
   }
 
-  Estimate_Wind();
-  project_this(this_aircraft);
   project_that(fop);
 
   if (fabs(this_aircraft->turnrate) < 2.0f && fabs(fop->turnrate) < 2.0f) {

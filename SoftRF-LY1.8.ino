@@ -105,6 +105,7 @@
 #include "src/ui/Web.h"
 #include "src/driver/Baro.h"
 #include "src/TTNHelper.h"
+#include "src/Wind.h"
 #include "src/TrafficHelper.h"
 #include "src/system/Recorder.h"
 
@@ -415,6 +416,9 @@ void normal()
     ThisAircraft.altitude  = gnss.altitude.meters();
     ThisAircraft.course    = gnss.course.deg();
     ThisAircraft.speed     = gnss.speed.knots();
+    ThisAircraft.gnsstime_ms = millis();
+    ThisAircraft.heading = ThisAircraft.course;
+    Estimate_Wind();
     ThisAircraft.hdop      = (uint16_t) gnss.hdop.value();
     ThisAircraft.geoid_separation = gnss.separation.meters();
 

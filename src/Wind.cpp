@@ -43,6 +43,7 @@ void Estimate_Wind(void)
   wind_best_ew = 0.0f;
   wind_speed = 0.0f;
   wind_direction = 0.0f;
+  project_this(&ThisAircraft);
 }
 
 void project_this(ufo_t *this_aircraft)
