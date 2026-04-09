@@ -8,6 +8,8 @@ float wind_speed = 0.0f;
 float wind_direction = 0.0f;
 
 static constexpr float KNOT_TO_MPS = 0.51444444f;
+static float own_cumul_turn = 0.0f;
+static uint32_t own_last_turn_ms = 0;
 
 static float wrap_360(float deg)
 {
@@ -54,6 +56,8 @@ void Estimate_Wind(void)
   uint32_t now = self->gnsstime_ms;
 
   if (now == 0) {
+    own_cumul_turn = 0.0f;
+    own_last_turn_ms = 0;
     return;
   }
 
@@ -71,6 +75,8 @@ void Estimate_Wind(void)
     wind_best_ew = 0.0f;
     wind_speed = 0.0f;
     wind_direction = 0.0f;
+    own_cumul_turn = 0.0f;
+    own_last_turn_ms = 0;
     project_this(self);
     return;
   }
@@ -107,6 +113,8 @@ void Estimate_Wind(void)
     self->heading = self->course;
     wind_best_ns = 0.0f;
     wind_best_ew = 0.0f;
+    own_cumul_turn = 0.0f;
+    own_last_turn_ms = 0;
   } else {
     self->airborne = 2;
 
