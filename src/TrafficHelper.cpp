@@ -117,7 +117,7 @@ static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
 
   project_that(fop);
 
-  if (fabs(this_aircraft->turnrate) < 2.0f && fabs(fop->turnrate) < 2.0f) {
+  if (this_aircraft->circling == 0 && fop->circling == 0) {
     return Alarm_Vector(this_aircraft, fop);
   }
 
