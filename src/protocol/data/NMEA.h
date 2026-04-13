@@ -45,6 +45,11 @@ enum
 #define PSKVC_VERSION       1
 #define MAX_PSKVC_LEN       64
 
+void NMEA_Debug_Alarm(uint8_t path,
+                      const ufo_t *own,
+                      const ufo_t *tgt,
+                      int aux);
+
 void NMEA_setup(void);
 void NMEA_loop(void);
 void NMEA_fini();

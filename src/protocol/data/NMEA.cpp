@@ -30,6 +30,8 @@
 
 #define ADDR_TO_HEX_STR(s, c) (s += ((c) < 0x10 ? "0" : "") + String((c), HEX))
 
+#define ALARM_DEBUG_NMEA 1
+
 #if defined(NMEA_TCP_SERVICE)
 WiFiServer *NmeaTCPServer = NULL;
 NmeaTCP_t NmeaTCP[MAX_NMEATCP_CLIENTS];
@@ -128,6 +130,63 @@ static char *ltrim(char *s)
 
   return s;
 }
+
+void NMEA_Debug_Alarm(uint8_t path,
+                      const ufo_t *own,
+                      const ufo_t *tgt,
+                      int aux)
+{
+#if ALARM_DEBUG_NMEA
+  if (settings->nmea_out == NMEA_OFF) {
+    return;
+  }
+
+  if (own == NULL || tgt == NULL) {
+    return;
+  }
+
+  /* Ne zatrpavati link bez potrebe */
+  if (tgt->distance > 3000.0f &&
+      tgt->alarm_level == ALARM_LEVEL_NONE &&
+      path != 'F') {
+    return;
+  }
+
+  char utc_buf[12];
+  snprintf_P(utc_buf, sizeof(utc_buf),
+             PSTR("%02d%02d%02d"),
+             hour(ThisAircraft.timestamp),
+             minute(ThisAircraft.timestamp),
+             second(ThisAircraft.timestamp));
+
+  int own_tr10 = (int) (own->turnrate * 10.0f);
+  int tgt_tr10 = (int) (tgt->turnrate * 10.0f);
+
+  snprintf_P(NMEABuffer, sizeof(NMEABuffer),
+             PSTR("$PSRFL,%s,%lu,%06X,%c,%d,%d,%d,%d,%d,%d,%d,%d*"),
+             utc_buf,
+             (unsigned long) millis(),
+             (uint32_t) tgt->addr,
+             (char) path,
+             (int) tgt->alarm_level,
+             (int) tgt->distance,
+             (int) tgt->bearing,
+             (int) own->circling,
+             (int) tgt->circling,
+             own_tr10,
+             tgt_tr10,
+             aux);
+
+  NMEA_add_checksum(NMEABuffer,
+                    sizeof(NMEABuffer) - strlen(NMEABuffer));
+
+  NMEA_Out(settings->nmea_out,
+           (byte *) NMEABuffer,
+           strlen(NMEABuffer),
+           false);
+#endif
+}
+
 
 void NMEA_add_checksum(char *buf, size_t limit)
 {

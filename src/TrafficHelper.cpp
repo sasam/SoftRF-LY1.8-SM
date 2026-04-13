@@ -24,6 +24,7 @@
 #include "driver/Sound.h"
 #include "ui/Web.h"
 #include "protocol/radio/Legacy.h"
+#include "protocol/data/NMEA.h"
 
 unsigned long UpdateTrafficTimeMarker = 0;
 
@@ -60,6 +61,9 @@ static int8_t Alarm_Distance(ufo_t *this_aircraft, ufo_t *fop)
     }
   }
 
+  fop->alarm_level = rval;
+  NMEA_Debug_Alarm('D', this_aircraft, fop, alt_diff);
+
   return rval;
 }
 
@@ -70,6 +74,7 @@ static int8_t Alarm_Distance(ufo_t *this_aircraft, ufo_t *fop)
  */
 static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
 {
+  float V_rel_magnitude;
   int8_t rval = ALARM_LEVEL_NONE;
   int alt_diff = (int) (fop->altitude - this_aircraft->altitude);
 
@@ -81,7 +86,7 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
     float V_rel_y = this_aircraft->speed * sinf(radians(90.0 - this_aircraft->course)) -
                     fop->speed * sinf(radians(90.0 - fop->course)) ;
 
-    float V_rel_magnitude = sqrtf(V_rel_x * V_rel_x + V_rel_y * V_rel_y) * _GPS_MPS_PER_KNOT;
+    V_rel_magnitude = sqrtf(V_rel_x * V_rel_x + V_rel_y * V_rel_y) * _GPS_MPS_PER_KNOT;
     float V_rel_direction = atan2f(V_rel_y, V_rel_x) * 180.0 / PI;  /* -180 ... 180 */
 
     /* convert from math angle into course relative to north */
@@ -103,6 +108,11 @@ static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
         rval = ALARM_LEVEL_LOW;
       }    
     }
+  }
+  fop->alarm_level = rval;
+
+  if (settings->alarm == TRAFFIC_ALARM_VECTOR) {
+    NMEA_Debug_Alarm('V', this_aircraft, fop, (int) V_rel_magnitude);
   }
   return rval;
 }
@@ -133,17 +143,24 @@ static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
   float adj_alt_diff = Adj_alt_diff(this_aircraft, fop);
 
   if (this_aircraft->airborne <= 1 || fop->airborne <= 1) {
+    fop->alarm_level = ALARM_LEVEL_NONE;
+    NMEA_Debug_Alarm('N', this_aircraft, fop, (int) adj_alt_diff);
     return ALARM_LEVEL_NONE;
   }
 
   if (fabsf(adj_alt_diff) >= VERTICAL_SEPARATION) {
+    fop->alarm_level = ALARM_LEVEL_NONE;
+    NMEA_Debug_Alarm('N', this_aircraft, fop, (int) adj_alt_diff);
     return ALARM_LEVEL_NONE;
   }
 
   project_that(fop);
 
   if (this_aircraft->circling == 0 && fop->circling == 0) {
-    return Alarm_Vector(this_aircraft, fop);
+    int8_t rval = Alarm_Vector(this_aircraft, fop);
+    fop->alarm_level = rval;
+    NMEA_Debug_Alarm('F', this_aircraft, fop, (int) adj_alt_diff);
+    return rval;
   }
 
   float brad = radians(fop->bearing);
@@ -168,15 +185,20 @@ static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
     }
   }
 
+  int8_t rval = ALARM_LEVEL_NONE;
+
   if (min_distance < ALARM_ZONE_URGENT) {
-    return ALARM_LEVEL_URGENT;
+    rval = ALARM_LEVEL_URGENT;
   } else if (min_distance < ALARM_ZONE_IMPORTANT) {
-    return ALARM_LEVEL_IMPORTANT;
+    rval = ALARM_LEVEL_IMPORTANT;
   } else if (min_distance < ALARM_ZONE_LOW) {
-    return ALARM_LEVEL_LOW;
+    rval = ALARM_LEVEL_LOW;
   }
 
-  return ALARM_LEVEL_NONE;
+  fop->alarm_level = rval;
+  NMEA_Debug_Alarm('L', this_aircraft, fop, (int) min_distance);
+  return rval;
+
 }
 
 /*
