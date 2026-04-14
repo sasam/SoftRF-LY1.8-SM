@@ -232,7 +232,7 @@ void setup()
   LED_setup();
 
   pinMode(TRACKER_BL_PIN, OUTPUT);
-  Screen_on();
+  Screen_off();
 
   WiFi_setup();
 
