@@ -74,7 +74,7 @@ static int8_t Alarm_Distance(ufo_t *this_aircraft, ufo_t *fop)
  */
 static int8_t Alarm_Vector(ufo_t *this_aircraft, ufo_t *fop)
 {
-  float V_rel_magnitude;
+  float V_rel_magnitude=0.0f;
   int8_t rval = ALARM_LEVEL_NONE;
   int alt_diff = (int) (fop->altitude - this_aircraft->altitude);
 
