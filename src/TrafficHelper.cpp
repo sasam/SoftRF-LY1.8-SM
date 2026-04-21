@@ -154,6 +154,12 @@ static int8_t Alarm_Latest(ufo_t *this_aircraft, ufo_t *fop)
     return ALARM_LEVEL_NONE;
   }
 
+  if (fop->distance > 2000) {
+     fop->alarm_level = ALARM_LEVEL_NONE;
+       NMEA_Debug_Alarm('N', this_aircraft, fop, (int) fop->distance);
+         return ALARM_LEVEL_NONE;
+  }
+
   project_that(fop);
 
   if (this_aircraft->circling == 0 && fop->circling == 0) {
