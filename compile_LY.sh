@@ -1,10 +1,13 @@
-arduino-cli compile /home/sasa/Arduino/SoftRF-LY1.8-SM \
-  -e \
-  --libraries /home/sasa/Arduino/SoftRF-LY1.8-SM/libraries_ly \
-  -b "esp32:esp32:esp32s3:USBMode=default,CDCOnBoot=cdc,CPUFreq=80,FlashSize=8M,PartitionScheme=default_8MB,EraseFlash=all" \
-  --jobs 12 \
-  --verbose 
-#  --clean
+#!/bin/sh
+
+DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+arduino-cli compile "$DIR" \
+    -e \
+      --libraries "$DIR/libraries_ly" \
+        -b "esp32:esp32:esp32s3:USBMode=default,CDCOnBoot=cdc,CPUFreq=80,FlashSize=8M,PartitionScheme=default_8MB,EraseFlash=all" \
+          --jobs 12 \
+            --verbose
+# --clean
 
 ###
 # sa ovim radi
