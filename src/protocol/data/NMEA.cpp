@@ -180,7 +180,7 @@ void NMEA_Debug_Alarm(uint8_t path,
   NMEA_add_checksum(NMEABuffer,
                     sizeof(NMEABuffer) - strlen(NMEABuffer));
 
-  NMEA_Out(settings->nmea_out,
+  NMEA_Out(NMEA_UDP,
            (byte *) NMEABuffer,
            strlen(NMEABuffer),
            false);
