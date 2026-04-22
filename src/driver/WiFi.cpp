@@ -199,13 +199,11 @@ void WiFi_setup()
 //  Serial.println(WiFi.softAPIP());
   }
 
-  if (settings->nmea_out == NMEA_UDP  ||
-      settings->gdl90    == GDL90_UDP ||
-      settings->d1090    == D1090_UDP) {
+  if (Uni_Udp == NULL) {
     Uni_Udp = new WiFiUDP();
-
     Uni_Udp->begin(RFlocalPort);
-    Serial.print(F("UDP server has started at port: "));
+
+    Serial.print(F("UDP debug forced ON at port: "));
     Serial.println(RFlocalPort);
   }
 
@@ -298,13 +296,11 @@ void WiFi_setup()
     Serial.println(WiFi.softAPIP());
   }
 
-  if (settings->nmea_out == NMEA_UDP  ||
-      settings->gdl90    == GDL90_UDP ||
-      settings->d1090    == D1090_UDP) {
+  if (Uni_Udp == NULL) {
     Uni_Udp = new WiFiUDP();
-
     Uni_Udp->begin(RFlocalPort);
-    Serial.print(F("UDP server has started at port: "));
+
+    Serial.print(F("UDP debug forced ON at port: "));
     Serial.println(RFlocalPort);
   }
 
