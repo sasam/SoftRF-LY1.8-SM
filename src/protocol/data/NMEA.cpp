@@ -340,6 +340,12 @@ void NMEA_loop()
     PGRMZ_TimeMarker = millis();
   }
 
+  static uint32_t last_test = 0;
+  if (millis() - last_test > 1000) {
+        last_test = millis();
+            NMEA_Out(NMEA_UDP, (byte *)"$TEST,123*00\r\n", 14, false);
+  }
+
 #if defined(ENABLE_AHRS)
   if (settings->nmea_s && isTimeToRPYL()) {
 
