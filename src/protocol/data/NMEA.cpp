@@ -342,8 +342,14 @@ void NMEA_loop()
 
   static uint32_t last_test = 0;
   if (millis() - last_test > 1000) {
-        last_test = millis();
-            NMEA_Out(NMEA_UDP, (byte *)"$TEST,123*00\r\n", 14, false);
+    last_test = millis();
+
+    snprintf_P(NMEABuffer, sizeof(NMEABuffer),
+               PSTR("$PSRFL,000000,0,ABCDEF,N,0,0,0,0,0,0,0,0*"));
+
+    NMEA_add_checksum(NMEABuffer, sizeof(NMEABuffer) - strlen(NMEABuffer));
+
+    NMEA_Out(NMEA_UDP, (byte *)NMEABuffer, strlen(NMEABuffer), false);
   }
 
 #if defined(ENABLE_AHRS)
