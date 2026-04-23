@@ -177,13 +177,10 @@ void NMEA_Debug_Alarm(uint8_t path,
              tgt_tr10,
              aux);
 
-  NMEA_add_checksum(NMEABuffer,
-                    sizeof(NMEABuffer) - strlen(NMEABuffer));
+  NMEA_add_checksum(NMEABuffer,sizeof(NMEABuffer) - strlen(NMEABuffer));
 
-  NMEA_Out(NMEA_UDP,
-           (byte *) NMEABuffer,
-           strlen(NMEABuffer),
-           false);
+  NMEA_Out(NMEA_UDP, (byte *)NMEABuffer,strlen(NMEABuffer),false);
+
 #endif
 }
 
@@ -338,18 +335,6 @@ void NMEA_loop()
 #endif /* EXCLUDE_LK8EX1 */
 
     PGRMZ_TimeMarker = millis();
-  }
-
-  static uint32_t last_test = 0;
-  if (millis() - last_test > 1000) {
-    last_test = millis();
-
-    snprintf_P(NMEABuffer, sizeof(NMEABuffer),
-               PSTR("$PSRFL,000000,0,ABCDEF,N,0,0,0,0,0,0,0,0*"));
-
-    NMEA_add_checksum(NMEABuffer, sizeof(NMEABuffer) - strlen(NMEABuffer));
-
-    NMEA_Out(NMEA_UDP, (byte *)NMEABuffer, strlen(NMEABuffer), false);
   }
 
 #if defined(ENABLE_AHRS)
